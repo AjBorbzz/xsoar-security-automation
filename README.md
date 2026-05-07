@@ -261,3 +261,14 @@ I am especially interested in the intersection of:
 This repository is continuously updated as a professional portfolio.
 
 The examples are intended to demonstrate engineering thinking, implementation style, documentation quality, and practical security automation experience.
+
+
+---
+
+## Confidentiality Notice
+
+This repository contains sanitized and recreated examples for portfolio purposes only.
+
+It does not include proprietary employer code, client data, production playbooks, confidential workflows, real incident data, tenant information, credentials, private indicators, internal screenshots, or non-public documentation.
+
+All examples use mock data, generic scenarios, and independently written code.
