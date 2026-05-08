@@ -32,3 +32,17 @@ Prevents:
     Use:
 
     ```a_records = xs_dict(context.get("DomainDNSDetails")).get("A")```
+
+3. flatten_list() 
+
+    XSOAR context often becomes nested like:
+    ```
+    [
+    [{"name": "1.1.1.1"}],
+    [{"name": "8.8.8.8"}]
+    ]
+    ```
+
+    Use:
+    
+    ```flat_items = xs_flatten(items)```
