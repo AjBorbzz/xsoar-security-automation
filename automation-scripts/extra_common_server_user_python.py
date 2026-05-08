@@ -15,6 +15,7 @@ def as_dict(value: Any) -> dict[str, Any]:
     return value if isinstance(value, dict) else {}
 
 def flatten_list(value: Any) -> List[Any]:
+    """Flatten nested lists and remove None values."""
     items: List[Any] = []
     def walk(v: Any):
         if isinstance(v, list):
@@ -26,3 +27,26 @@ def flatten_list(value: Any) -> List[Any]:
 
     walk(value)
     return items
+
+def get_nested_values(data: Any, path: str, default: Any = None) -> Any:
+    """
+    Safely get nested values from dict/list context.
+
+    example :
+     get_nested_values(context, "RecordedFuture.IP.name")
+     get_nested_values(context, "Triage.sample-summaries.score")
+    """
+    current = [data]
+
+    for key in path.split("."):
+        found = []
+
+        for item in flatten_list(current):
+            if isinstance(item, dict) and key in item:
+                found.append(item.get(key))
+
+        current = flatten_list(found)
+        if not current:
+            return default 
+        
+    return current[0] if len(current) == 1 else current
