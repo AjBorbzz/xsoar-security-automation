@@ -50,3 +50,15 @@ def get_nested_values(data: Any, path: str, default: Any = None) -> Any:
             return default 
         
     return current[0] if len(current) == 1 else current
+
+def get_dict_records(data: Any, path: str = "") -> List[Dict[str, Any]]:
+    """
+    Return only dict records from any context path.
+
+    Example:
+        xs_records(context, "RecordedFuture.IP")
+        xs_records(context, "Domain")
+    """
+
+    value = get_nested_values(data, path, []) if path else data 
+    return [item for item in flatten_list(as_list(value)) if isinstance(item, dict)]
