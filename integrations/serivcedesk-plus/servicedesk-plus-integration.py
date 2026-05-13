@@ -64,3 +64,53 @@ class Client(BaseClient):
             notif_unavailable = f'{err}'
             if '"status_code: 4000"' in notif_unavailable or '"status_code": 4007' in notif_unavailable:
                 return None
+            
+    def get_changes(self, change_id: str = None, params : dict = None):
+        """
+        Get specific change request if change_id is provided, else all change requests will be displayed.
+        """
+        if change_id:
+            return self.http_request(method='GET', url_suffix=f'changes/{change_id}')
+        else:
+            return self.http_request(method='GET', url_suffix='changes', params=params)
+        
+
+def create_changes_output(request: dict) -> dict: 
+    """
+    Creates the output specifically for Change API module.
+    Args:
+        request: A single request dict returned from the http_request.
+
+    Returns:
+        A dictionary containing required fields.
+    """
+
+    owner = request.get('change_owner') or {}
+    requester = request.get('change_requester') or {}
+    manager = request.get('change_manager') or {}
+    status = request.get('status') or {}
+    completed = request.get('completed_time') or {}
+    created = request.get('created_time') or {}
+
+    data = {
+        "change_owner": owner.get('name'),
+        "employee_id": owner.get('employee_id'),
+
+        "change_requester": requester.get('email_id'),
+        "is_technician": requester.get('is_technician'),
+
+        "change_manager": manager.get('name'),
+
+        "change_id": request.get('id'),
+        "description": request.get('description'),
+        "status": status.get('name'),
+
+        "completed_time": completed.get('display_value'),
+        "created_time": created.get('display_value'),
+
+        "title": request.get('title'),
+        "scheduled_start_time": request.get('scheduled_start_time'),
+        "scheduled_end_time": request.get('scheduled_end_time')
+    }
+
+    return data
