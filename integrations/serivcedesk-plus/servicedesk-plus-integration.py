@@ -114,3 +114,20 @@ def create_changes_output(request: dict) -> dict:
     }
 
     return data
+
+def create_human_readable_change_module(output: dict) -> dict:
+    """
+    Converts the output of a command to a human readable output specifically for Change API module.
+
+    Args: 
+        output: the output that should be converted to the human readable representation.
+    Returns:
+        dict: the dictionary that represents the human readable output.
+    """
+
+    hr = {}
+    for field in HUMAN_READABLE_FIELDS_CHG_MOD:
+        if output.get(field):
+            hr[field] = output.get(field)
+
+    return hr
