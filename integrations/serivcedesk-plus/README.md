@@ -16,11 +16,15 @@ Also, the official ServiceDesk Plus API documentation failed to provide details 
 
 2. Added View All Notification API Endpoint :
 
+    Method: `GET`
+
     This operation lets you view the details of all notification under Request.
 
     `{{base_url}}/api/v3/requests/<request_id>/notifications`
 
 3. Added View All Conversations:
+
+    Method: `GET`
 
     This operation lets you view the details of all conversations under Request.
 
@@ -28,4 +32,8 @@ Also, the official ServiceDesk Plus API documentation failed to provide details 
 
     **Note: this was extracted from the POSTMAN Documentation, I will update this endpoint to compare what is based in the documentation and what is truly working in their API module.
 
+4. Added Create Notification:
     
+    Method: `POST`
+
+    `{{base_url}}/api/v3/requests/<request_id>/notifications`
