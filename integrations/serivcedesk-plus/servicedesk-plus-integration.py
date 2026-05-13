@@ -13,6 +13,7 @@ import re
 # Other constants from OOTB ServiceDesk Plus were omitted to emphasize the custom/added scripts in the XSOAR ServiceDesk Plus integration.
 HUMAN_READABLE_FIELDS_CHG_MOD = ['created_time', 'change_id', 'change_requester', 'description', 
                                  'status','title','scheduled_start_time']
+CONTAINS_FIELDS = {"title", "description"}
 
 class Client(BaseClient): 
     # Other script was omitted 
@@ -131,3 +132,23 @@ def create_human_readable_change_module(output: dict) -> dict:
             hr[field] = output.get(field)
 
     return hr
+
+def process_search_criteria(search_criteria, search_value):
+    if search_criteria == 'change_owner':
+        return {
+            'field': 'change_owner.name',
+            'value': search_value,
+            'condition': 'eq'
+        }
+    field = (
+        f"{search_criteria}.email_id"
+        if search_criteria == 'change_requester'
+        else search_criteria
+    )
+
+    return {
+        'field': field,
+        'value': search_value,
+        'condition': 'contains' if search_criteria in CONTAINS_FIELDS else 'eq'
+    }
+
