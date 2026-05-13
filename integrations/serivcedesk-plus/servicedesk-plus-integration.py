@@ -36,11 +36,31 @@ class Client(BaseClient):
             request_id : 18 digit id of the Request. 
             params: payload of the Request.
         """
-        if request_id:
-            try:
-                res = self.http_request(method='GET', url_suffix=f'requests/{request_id}/conversations', params=params)
-                return res 
-            except Exception as err:
-                notif_unavailable = f'{err}'
-                if '"status_code: 4000"' in notif_unavailable or '"status_code": 4007' in notif_unavailable:
-                    return None
+        try:
+            res = self.http_request(method='GET', url_suffix=f'requests/{request_id}/conversations', params=params)
+            return res 
+        except Exception as err:
+            notif_unavailable = f'{err}'
+            if '"status_code: 4000"' in notif_unavailable or '"status_code": 4007' in notif_unavailable:
+                return None
+                
+    def get_notification(self, request_id: str = None, notification_item: dict = None):
+        """
+        Get a notfication item under a request. Check each notification type. If a notification has a type `NOTES` - notes endpoint will be used.
+        """
+        id_ = notification_item.get('id')
+        type_ = notification_item.get('type')
+        if type == 'NOTES':
+            url_suffix = f'requests/{request_id}/notes/{id_}'
+        else:
+            url_suffix = f'requests/{request_id}/notifications/{id_}'
+
+        try:
+            res = self.http_request(method='GET', url_suffix=url_suffix)
+            res['type'] = type_
+            return res 
+        
+        except Exception as err:
+            notif_unavailable = f'{err}'
+            if '"status_code: 4000"' in notif_unavailable or '"status_code": 4007' in notif_unavailable:
+                return None
