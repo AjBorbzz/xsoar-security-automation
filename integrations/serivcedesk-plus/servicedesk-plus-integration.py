@@ -188,3 +188,24 @@ def create_changes_list_info(start_index, row_count, filter_by, search_criteria,
         "list_info": list_info
     }
 
+def add_request_notification_command(client: Client, args: dict):
+    request_id: str = args.get('request_id')
+    subject: str = args.get('subject')
+    to: list = argsToList(args.get('to'))
+    description: str = args.get('description')
+    type_: str = args.get('type')
+
+    data = {
+        "notification": {
+            "subject": subject,
+            "description": description,
+            "to": to,
+            "type": "reply" if "reply" in type_ else type_,
+            "is_public": True
+        }
+    }
+
+    payload = {"input_data": json.dumps(data, ensure_ascii=True)}
+    result = client.http_request('POST', url_suffix=f'requests/{request_id}/notifications', data=payload)
+    readable_output = tableToMarkdown("Notification Added: ", t=[data.get('notification')]) #tableToMarkdown an XSOAR function
+    return readable_output, None, None
