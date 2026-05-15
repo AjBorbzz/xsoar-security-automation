@@ -217,4 +217,31 @@ def process_notifications(client: Client, notification_list: list, request_id: s
 
     return res_data
 
+def process_raw_notification(raw_notifications: list):
+    list_data = []
+    for item in raw_notifications:
+        data = {}
+        if item.get('type') == 'NOTES':
+            note = item.get('request_note')
+            data['time'] = note.get('created_time').get('display_value')
+            data['subject'] = note.get('request').get('subject')
+            data['sender'] = note.get('performed_by').get('email_id')
+            data['description'] = note.get('description')
+            data['type'] = item.get('type')
+
+        else:
+            notification = item.get('notification')
+            data['subject'] = notification.get('subject')
+            data['description'] = notification.get('description')
+            data['sender'] = notification.get('sender').get('email_id')
+            raw_to = notification.get('to')
+            data['to'] = ', '.join(raw_to) if isinstance(raw_to, list) else raw_to
+            data['time'] = notification.get('time').get('display_value')
+            data['type'] = item.get('type')
+
+        list_data.append(data)
+
+    return list_data
+
+
 
