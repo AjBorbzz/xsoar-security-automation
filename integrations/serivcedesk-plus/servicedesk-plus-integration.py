@@ -244,4 +244,42 @@ def process_raw_notification(raw_notifications: list):
     return list_data
 
 
+"""HTML templates for XSOAR layout dynamic section display"""
 
+MAX_SOAR_HTML_LEN = 40_000 # limits and downsize the html length so that the code will still render html in XSOAR layout.
+
+def sanitize_preview_html(raw_html: str) -> str:
+    if not raw_html:
+        return ""
+    
+    clean_html= html.unescape(str(raw_html))
+
+    clean_html = re.sub(r"<script\b[^>]*>.*?</script>", "", clean_html, flags=re.I | re.S)
+    clean_html = re.sub(r"<style\b[^>]*>.*?</style>", "", clean_html, flags=re.I | re.S)
+
+    clean_html = re.sub(r"\son\w+=['\"][^'\"]*['\"]", "", clean_html, flags=re.I)
+
+    clean_html = re.sub(
+        r'href=["\'](?!https?://|mailto:)[^"\']*["\']',
+        'href="#"',
+        clean_html,
+        flags=re.I
+    )
+
+    clean_html = re.sub(
+        r'<img\b([^>]*?)src=["\'](?!https?://)[^"\']*["\']([^>]*?)/?>',
+        "",
+        clean_html,
+        flags=re.I
+    )
+
+    clean_html = re.sub(
+        r"<p[^>]*>\s*(?:&nbsp;|\s)*</p>",
+        "",
+        clean_html,
+        flags=re.I
+    )
+
+    clean_html = re.sub(r"\\[nt]", "", clean_html)
+
+    return clean_html.strip()
