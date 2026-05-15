@@ -209,3 +209,12 @@ def add_request_notification_command(client: Client, args: dict):
     result = client.http_request('POST', url_suffix=f'requests/{request_id}/notifications', data=payload)
     readable_output = tableToMarkdown("Notification Added: ", t=[data.get('notification')]) #tableToMarkdown an XSOAR function
     return readable_output, None, None
+
+def process_notifications(client: Client, notification_list: list, request_id: str):
+    res_data = []
+    for item in notification_list:
+        res_data.append(client.get_notification(request_id, item))
+
+    return res_data
+
+
