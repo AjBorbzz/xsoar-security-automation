@@ -152,3 +152,39 @@ def process_search_criteria(search_criteria, search_value):
         'condition': 'contains' if search_criteria in CONTAINS_FIELDS else 'eq'
     }
 
+def create_changes_list_info(start_index, row_count, filter_by, search_criteria, search_value):
+    """
+    Returning the list_info dictionary that should be used to filter the changes that are being returned.
+
+    args: 
+        start_index: the index of the first change that should be returned.
+        row_count: the number of changes that should be returned.
+        filter_by: filter by which to filter the returned changes request.
+        search_criteria: search criteria option - refer to ServiceDesk Plus API doc.
+        search_value: the value to search.
+
+    Returns:
+        A dictionary containing the list_info parameter that should be used for filtering the changes.
+    """
+
+    list_info = []
+    if start_index:
+        list_info['start_index'] = start_index
+    if row_count:
+        list_info['row_count'] = row_count
+    if filter_by:
+        list_info['filter_by'] = filter_by
+    if search_criteria:
+        list_info['search_criteria'] = process_search_criteria(search_criteria, search_value)
+
+    list_info['sort_fields'] = [
+        {
+            "field": "created_time",
+            "order": "desc"
+        }
+    ]
+
+    return {
+        "list_info": list_info
+    }
+
