@@ -283,3 +283,22 @@ def sanitize_preview_html(raw_html: str) -> str:
     clean_html = re.sub(r"\\[nt]", "", clean_html)
 
     return clean_html.strip()
+
+
+def minify_html(raw_html: str) -> str:
+    """
+    Reduces whitespace between tags and inside style attributes.
+    Keeps HTML readable by browser/XSOAR but lowers len().
+    """
+
+    if not raw_html:
+        return ""
+    
+    raw_html = re.sub(r">\s+<", "><", raw_html)
+    raw_html = re.sub(r"\s{2,}", raw_html)
+    raw_html = re.sub(r";\s+", ";", raw_html)
+    raw_html = re.sub(r":\s+", ":", raw_html)
+    raw_html = re.sub(r"\s*{\s*", "{", raw_html)
+    raw_html = re.sub(r"\s*}\s*", "}", raw_html)
+
+    return raw_html.strip()
