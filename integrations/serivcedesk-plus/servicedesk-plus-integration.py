@@ -318,3 +318,4 @@ def strip_html_to_text(value: str) -> str:
     value = re.sub(r"<[^>]+>","", value)
     value = html.unescape(value)
     return value.strip()
+
