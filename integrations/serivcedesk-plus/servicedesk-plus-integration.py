@@ -319,3 +319,13 @@ def strip_html_to_text(value: str) -> str:
     value = html.unescape(value)
     return value.strip()
 
+def truncate_text(value: str, max_chars: int) -> str:
+    if not value:
+        return ""
+    
+    value = str(value).strip()
+
+    if len(value) <= max_chars:
+        return value
+    
+    return value[:max_chars].rstrip() + "..."
