@@ -302,3 +302,19 @@ def minify_html(raw_html: str) -> str:
     raw_html = re.sub(r"\s*}\s*", "}", raw_html)
 
     return raw_html.strip()
+
+def strip_html_to_text(value: str) -> str:
+    """
+    Used only for emergency truncation.
+    Converts HTML preview into plain text to reduce size safely.
+    """
+
+    if not value:
+        return ""
+    
+    value = sanitize_preview_html(value)
+    value = re.sub(r"<br\s*/?>", "\n", value, flags=re.I)
+    value = re.sub(r"</p\s*>", "\n", value, flags=re.I)
+    value = re.sub(r"<[^>]+>","", value)
+    value = html.unescape(value)
+    return value.strip()
