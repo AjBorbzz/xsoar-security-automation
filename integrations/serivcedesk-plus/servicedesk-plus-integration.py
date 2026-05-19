@@ -370,5 +370,11 @@ def render_card_full(item: Dict[str, Any]) -> str:
             </div>
             <span stlye="color:#c8d7ca;font-size:13px;font-weight:600;white-space:nowrap;">Type: {type_}</span>
         </div>
-    <div style="background:#143724;border:1px solid rgba(210,235,214,.14);
+        <div style="background:#143724;border:1px solid rgba(210,235,214,.14);border-radius:10px;padding:10px;">
+            <div style="font-size:19px;font-weight:700;color:#f2f7f2;margin-bottom:8px;">{subject}</div>
+            <div style="font-size:15px;color:#edf5ed;margin-bottom:16px;">To: {to}</div>
+            <hr style="border:none;border-top:1px solid rgba(230,240,230,.25);margin:0 0 16px;" />
+            <div style="font-size:16px;color:#d2ddd2;white-space:normal;">{description}</div>
+        </div>
+    </div>
     """
