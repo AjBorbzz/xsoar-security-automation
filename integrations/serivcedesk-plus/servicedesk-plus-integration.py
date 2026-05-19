@@ -351,4 +351,9 @@ def render_card_full(item: Dict[str, Any]) -> str:
     """
     Full visual version. Larger HTML - inline styles are more descriptive.
     """
-    pass
+    sender = escape(str(item.get("sender") or "System"))
+    time = escape(str(item.get("time") or "N/A"))
+    subject = escape(str(item.get("subject") or "N/A"))
+    to = escape(str(item.get("to") or "N/A"))
+    type_ = escape(str(item.get("type") or "N/A"))
+    description = sanitize_preview_html(item.get("description") or "")
