@@ -347,3 +347,8 @@ def render_empty_html() -> str:
         'padding:14px; color: #d2ddd2;">No Notifications found. </div>'
     )
 
+def render_card_full(item: Dict[str, Any]) -> str:
+    """
+    Full visual version. Larger HTML - inline styles are more descriptive.
+    """
+    pass
