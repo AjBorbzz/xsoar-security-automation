@@ -343,8 +343,8 @@ def parse_notification_time(item: Dict[str, Any]):
     
 def render_empty_html() -> str:
     return (
-        '<div style="font-family:Arial, Helvetica, sans-serif;'
-        'padding:14px; color: #d2ddd2;">No Notifications found. </div>'
+        '<div style="font-family:Arial,Helvetica,sans-serif;'
+        'padding:14px;color:#d2ddd2;">No Notifications found. </div>'
     )
 
 def render_card_full(item: Dict[str, Any]) -> str:
@@ -357,3 +357,16 @@ def render_card_full(item: Dict[str, Any]) -> str:
     to = escape(str(item.get("to") or "N/A"))
     type_ = escape(str(item.get("type") or "N/A"))
     description = sanitize_preview_html(item.get("description") or "")
+
+    return f"""
+
+    <div style="background:#1b4f31;border-radius:10px;padding:10px;margin-bottom:8px;
+        font-family:Arial,Helvetica,sans-serif;color:#eaf5ea;border:1px solid rgba(210,235,214,.16);
+        box-shadow:0 4px 14px rgba(0,0,0,.22);">
+        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+            <span style="color:#63d67c;font-weight:700;">{sender}</span>
+            <span style="color:#c8d7ca;font-weight:500;">• {time}</span>
+        </div>
+        <span stlye="color:#c8d7ca;font-size:13px;font-weight:600;white-space:nowrap;">Type: {type_}</span>
+  
+    """
