@@ -329,3 +329,21 @@ def truncate_text(value: str, max_chars: int) -> str:
         return value
     
     return value[:max_chars].rstrip() + "..."
+
+def parse_notification_time(item: Dict[str, Any]):
+    """
+    Sort helper. Keeps invalid/missing dates at the bottom.
+    """
+
+    try: 
+        return datetime.strptime(item.get("time", ""), "%b %d, %Y %I:%M %p")
+
+    except Exception:
+        return datetime.min
+    
+def render_empty_html() -> str:
+    return (
+        '<div style="font-family:Arial, Helvetica, sans-serif;'
+        'padding:14px; color: #d2ddd2;">No Notifications found. </div>'
+    )
+
