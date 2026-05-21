@@ -432,3 +432,56 @@ def render_card_ultra_sim(item: Dict[str, Any], desc_max_chars: int = 300) -> st
         f'<span>{description}</span>'
         f'</div>'
     )
+
+def render_html_container(cards_html: str, slim: bool= False) -> str:
+    if slim:
+        return (
+            f'<div style="max-width:1200px;margin:0 auto;padding:6px;'
+            f'font-family:Arial;color:#eaf5ea;">{cards_html}</div>'
+        )
+    return f"""
+    <div style="max-width:1200px;margin:0 auto;padding:8px;
+    font-family:Arial,Helvetica,sans-serif;color:#eaf5ea;">
+        {cards_html}
+    </div>
+    """
+
+def render_html(notifications: List[Dict[str,Any]], max_len: int = MAX_SOAR_HTML_LEN) -> str:
+    """
+    Renders full html.
+    If rendered output exceeds max_len, rerenders using slim cards.
+    If still too large, rerenders using ultra-slin cards.
+    If still too large, reduces card count until it fits.
+    """
+
+    if not notifications:
+        return render_empty_html()
+    
+    sorted_data = sorted(
+        notifications,
+        key=parse_notification_time,
+        reverse=True
+    )
+
+    full_cards = "".join(render_card_full(item) for item in sorted_data)
+    clean_html = minify_html(render_html_container(full_cards))
+
+    if len(clean_html) <= max_len:
+        return clean_html
+    
+    slim_cards = "".join(render_card_slim(item, desc_max_chars=800) for item in sorted_data)
+    clean_html = minify_html(render_html_container(slim_cards, slim=True))
+
+    if len(clean_html) <= max_len:
+        return clean_html
+    
+    ultra_cards = "".join(render_card_ultra_sim(item, desc_max_chars=300) for item in sorted_data)
+    clean_html = minify_html(render_html_container(ultra_cards, slim=True))
+
+    if len(clean_html) <= max_len:
+        return clean_html
+    
+    fitted_cards = []
+    omitted_count = 0
+
+    # Todo : continue the logic
