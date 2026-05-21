@@ -390,3 +390,22 @@ def render_card_slim(item: Dict[str, Any], desc_max_chars: int = 800) -> str:
     to = escape(str(item.get("to") or "N/A"))
     type_ = escape(str(item.get("type") or "N/A"))
     description = sanitize_preview_html(item.get("description") or "")
+
+    if len(description) > desc_max_chars:
+        description = escape(truncate_text)
+
+    return (
+        f'<div style="background:#1b4f31;border-radius:10px;padding:10px;margin:0 0 8px;'
+        f'font-family:Arial;color:#eaf5ea;'
+        f'<div style="color:#c8d7ca;font-size:14px;margin-bottom:8px;'
+        f'<b style="color:#63d67c;">{sender}</b> • {time}'
+        f'<span style="float:right;color:#fff;">Type: {type_}</span>'
+        f'</div>'
+        f'<div style="background:#143724;border-radius:8px;padding:10px;">'
+        f'<div style="font-size:17px;font-weight:700;color:#fff;margin-bottom:8px;">{subject}</div>'
+        f'<div style="font-size:14px;color:#fff;margin-bottom:8px;"><b>To:</b> {to}</div>'
+        f'<div style="border-top:1px solid rgba(230,240,230,.25);padding-top:8px;'
+        f'font-size:14px;color:#d2ddd2;">{description}</div>'
+        f'</div></div>'
+    )
+
