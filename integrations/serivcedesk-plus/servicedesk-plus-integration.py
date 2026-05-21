@@ -426,4 +426,9 @@ def render_card_ultra_sim(item: Dict[str, Any], desc_max_chars: int = 300) -> st
     return (
         f'<div style="background:#1b4f31;border-radius:8px;padding:8px;margin-bottom:6px;'
         f'font-family:Arial;color:#eaf5ea;font-size:13px;">'
+        f'<b>{subject}</b><br>'
+        f'<span style="color:#c8d7ca;">{sender} • {time} • Type: {type_}</span><br>'
+        f'<span><b>To: </b>{to}</span><br>'
+        f'<span>{description}</span>'
+        f'</div>'
     )
