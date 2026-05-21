@@ -378,3 +378,15 @@ def render_card_full(item: Dict[str, Any]) -> str:
         </div>
     </div>
     """
+
+def render_card_slim(item: Dict[str, Any], desc_max_chars: int = 800) -> str:
+    """
+    Slim version. Still inline-styled for XSOAR, but much smaller.
+    Uses fewer wrappers, shorter CSS, and capped description length.
+    """
+    sender = escape(str(item.get("sender") or "System"))
+    time = escape(str(item.get("time") or "N/A"))
+    subject = escape(str(item.get("subject") or "N/A"))
+    to = escape(str(item.get("to") or "N/A"))
+    type_ = escape(str(item.get("type") or "N/A"))
+    description = sanitize_preview_html(item.get("description") or "")
