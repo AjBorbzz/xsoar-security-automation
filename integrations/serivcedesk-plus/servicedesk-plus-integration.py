@@ -396,8 +396,8 @@ def render_card_slim(item: Dict[str, Any], desc_max_chars: int = 800) -> str:
 
     return (
         f'<div style="background:#1b4f31;border-radius:10px;padding:10px;margin:0 0 8px;'
-        f'font-family:Arial;color:#eaf5ea;'
-        f'<div style="color:#c8d7ca;font-size:14px;margin-bottom:8px;'
+        f'font-family:Arial;color:#eaf5ea;">'
+        f'<div style="color:#c8d7ca;font-size:14px;margin-bottom:8px;">'
         f'<b style="color:#63d67c;">{sender}</b> • {time}'
         f'<span style="float:right;color:#fff;">Type: {type_}</span>'
         f'</div>'
@@ -409,3 +409,21 @@ def render_card_slim(item: Dict[str, Any], desc_max_chars: int = 800) -> str:
         f'</div></div>'
     )
 
+def render_card_ultra_sim(item: Dict[str, Any], desc_max_chars: int = 300) -> str:
+    """The last resort version. Plain text compact cards"""
+    sender = escape(str(item.get("sender") or "System"))
+    time = escape(str(item.get("time") or "N/A"))
+    subject = escape(str(item.get("subject") or "N/A"))
+    to = escape(str(item.get("to") or "N/A"))
+    type_ = escape(str(item.get("type") or "N/A"))
+    description = escape(
+        truncate_text(
+            strip_html_to_text(item.get("description") or ""),
+            desc_max_chars
+        )
+    )
+
+    return (
+        f'<div style="background:#1b4f31;border-radius:8px;padding:8px;margin-bottom:6px;'
+        f'font-family:Arial;color:#eaf5ea;font-size:13px;">'
+    )
