@@ -499,3 +499,21 @@ def render_html(notifications: List[Dict[str,Any]], max_len: int = MAX_SOAR_HTML
             )
 
         test_html = minify_html(render_html_container(test_cards + footer, slim=True))
+
+        if len(test_html) > max_len:
+            omitted_count = len(sorted_data) - len(fitted_cards)
+            break 
+
+        fitted_cards.append(candidate_card)
+    footer = ""
+
+    if omitted_count > 0:
+        footer = (
+            f'<div style="font-family:Arial;color:#c8d7ca;font-size:13px;'
+            f'padding:8px;">{omitted_count} older notification(s) omitted because '
+            f'the XSOAR dynamic section reached the HTML size limit. </div>'
+        )
+
+    final_html = minify_html(render_html_container("".join(fitted_cards) + footer, slim=True))
+    return final_html[:max_len]
+
