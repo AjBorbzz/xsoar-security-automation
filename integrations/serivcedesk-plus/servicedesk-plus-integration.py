@@ -517,3 +517,43 @@ def render_html(notifications: List[Dict[str,Any]], max_len: int = MAX_SOAR_HTML
     final_html = minify_html(render_html_container("".join(fitted_cards) + footer, slim=True))
     return final_html[:max_len]
 
+def get_request_conversations_command(client: Client, args: dict):
+    """
+    Get the conversation of reequests.
+    Args: 
+        client: Client object with request.
+        args: Usually demisto.args()
+
+    Returns:
+        Demisto Outputs
+    """
+
+    request_id = args.get('request_id', None)
+    input_data = '''{"list_info":{"row_count":1000}}'''
+    params = {
+        'input_data': input_data
+    }
+    results = client.get_requests_conversations(request_id, params)
+    conversations = results.get('conversations')
+    notification_list = []
+    for item in conversations:
+        data = {
+            'id': item.get('id'),
+            'type': item.get('type')
+        }
+
+        notification_list.append(data)
+
+    raw_notifications = process_notifications(client, notification_list, request_id)
+    notifications = process_raw_notification(raw_notifications)
+
+    clean_html = render_html(notifications)
+    if len(clean_html) > 40_000:
+        clean_html = clean_html[:40_000]
+
+    context: dict = defaultdict(list)
+    context['ServiceDeskPlus(val.ID===obj.ID)'] = {
+        'Notifications': clean_html
+    }
+
+    return "### HTML Rendered ", context, None
