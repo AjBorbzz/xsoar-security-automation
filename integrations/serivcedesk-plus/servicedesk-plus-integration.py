@@ -557,3 +557,50 @@ def get_request_conversations_command(client: Client, args: dict):
     }
 
     return "### HTML Rendered ", context, None
+
+# Additional REST API "Changes" Module, this is not included in XSOAR Integration
+def list_changes_command(client: Client, args: dict):
+    """
+    Get the details of changes. The returned requests can be filtered by a single change id or by input_data param.
+
+    Args: 
+        client: Client object with change.
+        args: Usually demisto.args()
+
+    Returns:
+        Demisto Outputs.
+    """
+
+    change_id = args.get('change_id', None)
+    start_index = args.get('start_index', None)
+    row_count = args.get('page_size', None)
+    filter_by = args.get('filter_by', None)
+    search_criteria = args.get('search_criteria', None)
+    search_value = args.get('search_value', None)
+    list_info = create_changes_list_info(start_index, row_count, filter_by, search_criteria, search_value)
+
+    params = {
+        'input_data': f'{list_info}'
+    }
+
+    result = client.get_changes(change_id=change_id, params=params)
+
+    output = []
+    hr = []
+    context: dict = defaultdict(list)
+    if change_id:
+        changes = [result.get('change') or []]
+    else:
+        changes = result.get('changes') or []
+
+    for change in changes:
+        change_output = create_changes_output(change)
+        output.append(change_output)
+        hr.append(create_human_readable_change_module(change_output))
+
+    context['ServiceDeskPlus(val.ID===obj.ID)'] = {
+        'Change': output
+    }
+
+    markdown = tableToMarkdown('Changes', t=hr)
+    return markdown, context, result
