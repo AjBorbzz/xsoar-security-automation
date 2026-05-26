@@ -604,3 +604,13 @@ def list_changes_command(client: Client, args: dict):
 
     markdown = tableToMarkdown('Changes', t=hr)
     return markdown, context, result
+
+
+### Add commands in the main()
+"""
+...
+'service-desk-plus-changes-list' : list_changes_command,
+'service-desk-plus-get-conversations': get_request_conversations_command,
+'service-desk-plus-add-notification': add_request_notification_command,
+'service-desk-plus-add-note': add_request_note_command,
+"""
