@@ -13,6 +13,13 @@
 
 
 ### Get All Conversations
+**Command Name:**  service-desk-plus-get-conversations
+**Description:**  View the details of requets notifications.
+**Arguments:** 
+* request_id : The unique request id of the request that should be shown.
+
+**Outputs:**
+ServiceDeskPlus.Notifications : [List, Dict]
 
 ### Get All Notifications
 
