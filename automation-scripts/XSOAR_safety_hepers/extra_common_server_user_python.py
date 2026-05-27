@@ -62,3 +62,37 @@ def get_dict_records(data: Any, path: str = "") -> List[Dict[str, Any]]:
 
     value = get_nested_values(data, path, []) if path else data 
     return [item for item in flatten_list(as_list(value)) if isinstance(item, dict)]
+
+def get_subplaybook_context(res: Dict[str, Any], ctx_key: str) -> Optional[Any]:
+    """
+    Get context from a subplaybook.
+    """
+
+    if not isinstance(res, dict):
+        return None 
+    
+    context = res.get("context")
+    if not isinstance(context, dict):
+        return None 
+    
+    context_key = context.get(ctx_key)
+    if context_key:
+        return context_key 
+    
+    for key, val in context.items():
+        if "subplaybook" not in str(key).lower():
+            continue 
+
+        if isinstance(val, dict):
+            desired_ky = val.get(ctx_key)
+            if desired_ky:
+                return desired_ky 
+            
+        elif isinstance(val, list):
+            for item in reversed(val):
+                if isinstance(item, dict):
+                    desired_ky = item.get(ctx_key)
+                    if desired_ky:
+                        return desired_ky
+                    
+    return None
