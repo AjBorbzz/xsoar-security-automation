@@ -21,6 +21,6 @@
 **Outputs:**
 ServiceDeskPlus.Notifications : [List, Dict]
 
-### Get All Notifications
 
 ### Add Notes
+(Not Working Properly)
